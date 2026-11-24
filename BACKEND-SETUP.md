@@ -11,6 +11,7 @@ Keep the existing `index.html` at the repository root. These backend files are a
 - `netlify/functions/admin-action.mjs`
 - `netlify/functions/verify-boosts.mjs`
 - `netlify/functions/submit-claim.mjs`
+- `netlify/functions/request-boost.mjs`
 - `firestore.rules`
 
 ## Required Netlify environment variables
