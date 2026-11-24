@@ -56,10 +56,10 @@ export default async function handler(request) {
 
       try {
         const userId = String(claim.discordUserId || "");
-        const mention = /^\\d{17,20}$/.test(userId) ? `<@${userId}>` : "A booster";
+        const mention = /^\d{17,20}$/.test(userId) ? `<@${userId}>` : "A booster";
         await sendWebhook(process.env.DISCORD_URL_ANNOUNCE, {
           content: `🎉 ${mention} has been approved for **${String(claim.rankName || "Boost")}** rewards!`,
-          allowed_mentions: /^\\d{17,20}$/.test(userId) ? { users: [userId] } : { parse: [] },
+          allowed_mentions: /^\d{17,20}$/.test(userId) ? { users: [userId] } : { parse: [] },
           embeds: [{
             title: "Boost Rewards Confirmed",
             color: 0x22c55e,
