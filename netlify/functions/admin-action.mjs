@@ -22,6 +22,50 @@ export default async function handler(request) {
       return json({ ok: true, claims: snap.docs.map(doc => ({ id: doc.id, ...doc.data() })) });
     }
 
+    if (body.action === "list-boost-requests") {
+      const snap = await db.collection("boost_requests").orderBy("createdAt", "desc").limit(100).get();
+      return json({ ok: true, requests: snap.docs.map(doc => ({ id: doc.id, ...doc.data() })) });
+    }
+
+    if (body.action === "review-boost-request") {
+      const requestId = body.requestId;
+      const decision = body.decision;
+      if (typeof requestId !== "string" || !/^[A-Za-z0-9_-]{10,150}$/.test(requestId)) return json({ error: "Invalid request ID." }, 400);
+      if (decision !== "accept" && decision !== "deny") return json({ error: "Invalid request decision." }, 400);
+      const ref = db.collection("boost_requests").doc(requestId);
+      const status = decision === "accept" ? "accepted" : "denied";
+      const processing = decision === "accept" ? "accepting" : "denying";
+
+      await db.runTransaction(async tx => {
+        const current = await tx.get(ref);
+        if (!current.exists) throw new Error("Boost request not found.");
+        if (current.data().status !== "pending") throw new Error("This boost request has already been reviewed.");
+        tx.update(ref, { status: processing });
+      });
+
+      try {
+        await sendWebhook(process.env.DISCORD_URL_REVIEW_STATUS, {
+          content: decision === "accept" ? "ACCEPTED FROM WEBSITE" : "DENIED FROM WEBSITE",
+          embeds: [{
+            title: decision === "accept" ? "Boost Amount Request Accepted" : "Boost Amount Request Denied",
+            color: decision === "accept" ? 0x22c55e : 0xef4444,
+            fields: [
+              { name: "Discord username", value: String((await ref.get()).data()?.discordUsername || "Unknown"), inline: true },
+              { name: "In-game username", value: String((await ref.get()).data()?.mcUser || "Unknown"), inline: true },
+              { name: "Request ID", value: requestId, inline: false }
+            ],
+            timestamp: new Date().toISOString()
+          }],
+          allowed_mentions: { parse: [] }
+        });
+        await ref.update({ status, reviewedAt: new Date().toISOString() });
+        return json({ ok: true, status });
+      } catch (error) {
+        await ref.update({ status: "pending", reviewErrorAt: new Date().toISOString() }).catch(() => {});
+        throw error;
+      }
+    }
+
     if (body.action === "clear-boosts") {
       await db.collection("huz_shared").doc("boost_meter").set({
         boosts: 0, updatedAt: new Date().toISOString(), clearedByAdmin: true
