@@ -5,7 +5,7 @@ export default async function handler(request) {
   if (!sameOrigin(request)) return json({ error: "Request origin rejected." }, 403);
   try {
     const { discordUserId } = await readBody(request);
-    if (typeof discordUserId !== "string" || !/^\\d{17,20}$/.test(discordUserId)) {
+    if (typeof discordUserId !== "string" || !/^\d{17,20}$/.test(discordUserId)) {
       return json({ error: "Enter a valid Discord User ID." }, 400);
     }
     const status = await discordMemberStatus(discordUserId);
