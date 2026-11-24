@@ -358,6 +358,21 @@
       </div>
     </div>
 
+
+
+    <!-- MANUAL BOOST REQUEST -->
+    <section class="mb-5 holo-card rounded-2xl border border-indigo-400/30 p-4 sm:p-5">
+      <div class="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+        <div>
+          <h2 class="font-display text-lg font-bold text-white">Need a boost amount?</h2>
+          <p class="mt-1 text-xs text-zinc-400">Send your Discord username and in-game username to the private review team.</p>
+        </div>
+        <button type="button" onclick="openBoostRequestModal()" class="w-full rounded-xl border border-indigo-300/40 bg-indigo-500/20 px-4 py-2.5 text-xs font-bold text-indigo-100 transition hover:bg-indigo-500/30 sm:w-auto">
+          Request Boost Amount
+        </button>
+      </div>
+    </section>
+
     <!-- RANKS SECTION -->
     <section id="ranksSection" class="grid grid-cols-1 gap-5 md:grid-cols-3">
       <!-- VIP+ Card -->
@@ -576,6 +591,35 @@
           Submit Boost Claim
         </button>
       </div>
+    </div>
+  </div>
+
+
+  <!-- MANUAL BOOST REQUEST MODAL -->
+  <div id="boostRequestModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+    <div class="holo-card relative w-full max-w-md rounded-2xl border border-indigo-400/40 p-5 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-300">Private Review Request</span>
+          <h3 class="font-display text-xl font-bold text-white">Request Boost Amount</h3>
+        </div>
+        <button type="button" onclick="closeBoostRequestModal()" class="rounded-lg bg-white/10 px-2.5 py-1 text-xs font-bold text-zinc-300 hover:bg-white/20">✕</button>
+      </div>
+      <form class="mt-4 space-y-3 text-xs" onsubmit="submitBoostAmountRequest(event)">
+        <div>
+          <label for="boostRequestDiscordUsername" class="block font-semibold text-zinc-300">Discord username (not display name)</label>
+          <input id="boostRequestDiscordUsername" type="text" required minlength="2" maxlength="32" autocomplete="username" placeholder="e.g. huzdupe_user" class="mt-1 w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-white placeholder-zinc-500 focus:border-indigo-400 focus:outline-none" />
+          <p class="mt-1 text-[10px] text-zinc-500">Use your unique Discord @username, not your server nickname or display name. Do not include the @.</p>
+        </div>
+        <div>
+          <label for="boostRequestMinecraftUsername" class="block font-semibold text-zinc-300">In-game username (IGN)</label>
+          <input id="boostRequestMinecraftUsername" type="text" required minlength="3" maxlength="16" autocomplete="off" placeholder="e.g. Notch" class="mt-1 w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-white placeholder-zinc-500 focus:border-indigo-400 focus:outline-none" />
+        </div>
+        <p id="boostRequestFeedback" class="text-[11px] text-zinc-400" aria-live="polite">Your request will be sent to the private review webhook.</p>
+        <button id="boostRequestSubmitBtn" type="submit" class="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-fuchsia-600 py-2.5 font-bold text-white shadow-lg transition hover:brightness-110">
+          Send Request
+        </button>
+      </form>
     </div>
   </div>
 
@@ -1064,6 +1108,64 @@
         boostVerifiedFlag = false;
       } finally {
         btn.textContent = 'Submit Boost Claim'; validateClaimForm();
+      }
+    }
+
+    function openBoostRequestModal() {
+      playUiSound('click');
+      const modal = document.getElementById('boostRequestModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeBoostRequestModal() {
+      const modal = document.getElementById('boostRequestModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function submitBoostAmountRequest(event) {
+      event.preventDefault();
+      const discordUsername = String(document.getElementById('boostRequestDiscordUsername').value || '').trim().replace(/^@/, '');
+      const mcUser = String(document.getElementById('boostRequestMinecraftUsername').value || '').trim();
+      const feedback = document.getElementById('boostRequestFeedback');
+      const btn = document.getElementById('boostRequestSubmitBtn');
+
+      if (!/^[a-z0-9._]{2,32}$/i.test(discordUsername)) {
+        feedback.textContent = 'Enter your unique Discord username (2–32 letters, numbers, periods, or underscores).';
+        feedback.className = 'text-[11px] font-bold text-rose-300';
+        return;
+      }
+      if (!/^[A-Za-z0-9_]{3,16}$/.test(mcUser)) {
+        feedback.textContent = 'Enter a valid in-game username (3–16 letters, numbers, or underscores).';
+        feedback.className = 'text-[11px] font-bold text-rose-300';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      feedback.textContent = 'Sending your request to the review team...';
+      feedback.className = 'text-[11px] text-zinc-400';
+      try {
+        const response = await fetch('/.netlify/functions/request-boost', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ discordUsername, mcUser })
+        });
+        const result = await readFunctionJson(response);
+        if (!response.ok) throw new Error(result.error || 'Could not send your request.');
+        playUiSound('success');
+        showToast('Boost amount request sent!', 'emerald');
+        document.getElementById('boostRequestDiscordUsername').value = '';
+        document.getElementById('boostRequestMinecraftUsername').value = '';
+        closeBoostRequestModal();
+      } catch (error) {
+        feedback.textContent = error.message || 'Request failed. Please try again.';
+        feedback.className = 'text-[11px] font-bold text-rose-300';
+        playUiSound('error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Request';
       }
     }
 
