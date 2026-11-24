@@ -26,7 +26,7 @@ Add these under Netlify → Site configuration → Environment variables:
 | `DISCORD_BOT_TOKEN` | Bot token for a bot in the target server |
 | `DISCORD_GUILD_ID` | Target Discord server ID |
 | `DISCORD_URL_CHECK` | New private claim-review webhook URL |
-| `DISCORD_URL_ANNOUNCE` | New public approval-announcement webhook URL |
+| `DISCORD_URL_ANNOUNCE` | New public approval-announcement webhook URL |\n| `DISCORD_URL_REVIEW_STATUS` | Separate private webhook for accepted/denied Request Boost Amount status messages |
 
 Never commit these values or put them in `index.html`.
 
@@ -36,7 +36,7 @@ The bot must be in the target server and have access to guild members. Enable th
 
 No booster role ID is used.
 
-Webhook messages cannot implement working Confirm/Deny buttons by themselves. The private notification directs admins to the website's admin panel. Approve/deny actions happen there; only approval sends to the public announcement webhook.
+Webhook messages cannot implement working Confirm/Deny buttons by themselves. The private notification directs admins to the website's admin panel. Request Boost Amount submissions are saved in the `boost_requests` collection and reviewed there. Accept/deny sends exactly `ACCEPTED FROM WEBSITE` or `DENIED FROM WEBSITE` to `DISCORD_URL_REVIEW_STATUS`. This is a separate webhook; the `DISCORD_URL_CHECK` secret is never forwarded or exposed.
 
 ## Firebase setup
 
@@ -59,6 +59,6 @@ The website already reads `huz_shared/boost_meter` and calls all four Netlify fu
 
 - `huz_shared/boost_meter`
 - `boost_claims/{claimId}`
-- `claim_cooldowns/{discordUserId}`
+- `claim_cooldowns/{discordUserId}`\n- `boost_requests/{requestId}`
 
 The claim cooldown is enforced on the server for one claim per Discord account every three hours. The browser's local timer is only a display aid.
