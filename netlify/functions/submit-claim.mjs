@@ -12,7 +12,7 @@ export default async function handler(request) {
   try {
     const { mcUser, discordUserId, rankName } = await readBody(request);
     if (!validMinecraftName(mcUser)) return json({ error: "Enter a valid Minecraft username (3–16 letters, numbers, or underscores)." }, 400);
-    if (typeof discordUserId !== "string" || !/^\\d{17,20}$/.test(discordUserId)) return json({ error: "Enter a valid Discord User ID." }, 400);
+    if (typeof discordUserId !== "string" || !/^\d{17,20}$/.test(discordUserId)) return json({ error: "Enter a valid Discord User ID." }, 400);
     if (!Object.hasOwn(REQUIRED_BOOSTS, rankName)) return json({ error: "Unknown reward rank." }, 400);
 
     // Recheck eligibility with Discord; never trust client-side verification flags or counts.
