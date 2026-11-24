@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=aebf2747-fbf0-4958-8bfa-7a0135ca3b37
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HuzDupe • Official Discord Boost Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Fredoka', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            void: '#070609',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      background-color: #070609;
+      color: #f4f4f6;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    @keyframes crystalFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    @keyframes spinSlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spinReverse {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @keyframes borderShimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes progressGloss {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    @keyframes scanlineSweep {
+      0% { transform: translateY(-100%); opacity: 0; }
+      30% { opacity: 0.25; }
+      70% { opacity: 0.25; }
+      100% { transform: translateY(420%); opacity: 0; }
+    }
+
+    @keyframes fadeSlideUp {
+      0% { opacity: 0; transform: translateY(14px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .animate-crystal {
+      animation: crystalFloat 4.2s ease-in-out infinite;
+    }
+
+    .animate-spin-slow {
+      animation: spinSlow 16s linear infinite;
+    }
+
+    .animate-spin-reverse {
+      animation: spinReverse 22s linear infinite;
+    }
+
+    .animate-fade-up {
+      animation: fadeSlideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .animate-shake {
+      animation: shakeError 0.36s ease-in-out;
+    }
+
+    .boost-bar-gloss {
+      background-image: linear-gradient(
+        90deg,
+        #d946ef 0%,
+        #f59e0b 45%,
+        #fde68a 50%,
+        #f59e0b 55%,
+        #d946ef 100%
+      );
+      background-size: 200% 100%;
+      animation: progressGloss 2.5s linear infinite;
+    }
+
+    .holo-card {
+      position: relative;
+      background: linear-gradient(145deg, rgba(22, 17, 30, 0.92), rgba(9, 8, 12, 0.96));
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .holo-card::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(120deg, rgba(245, 158, 11, 0.45), rgba(217, 70, 239, 0.6), rgba(56, 189, 248, 0.45));
+      background-size: 220% 220%;
+      animation: borderShimmer 5.5s ease infinite;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.75;
+    }
+
+    .holo-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 40px -15px rgba(217, 70, 239, 0.28);
+    }
+
+    .card-spotlight {
+      background: radial-gradient(
+        340px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(217, 70, 239, 0.14),
+        transparent 70%
+      );
+    }
+
+    .scanline-fx {
+      animation: scanlineSweep 7s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-void text-zinc-100 selection:bg-fuchsia-500 selection:text-white">
+  <!-- Ambient Background -->
+  <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+    <div class="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-fuchsia-600/15 blur-3xl"></div>
+    <div class="absolute right-0 top-1/4 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-purple-700/15 blur-3xl"></div>
+  </div>
+
+  <!-- Scroll Progress Strip -->
+  <div class="fixed left-0 right-0 top-0 z-50 h-1 bg-white/5">
+    <div id="scrollProgressBar" class="boost-bar-gloss h-full w-0 transition-all duration-150"></div>
+  </div>
+
+  <!-- Sticky Top Navigation -->
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-void/85 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2.5 px-4 py-2.5 sm:px-6">
+      <!-- Brand + Server IP -->
+      <div class="flex items-center gap-2.5">
+        <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 via-fuchsia-500 to-purple-700 font-display text-lg font-bold text-white shadow-lg shadow-fuchsia-500/25">
+          H
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-display text-lg font-bold tracking-wide text-white">HuzDupe</span>
+            <button
+              type="button"
+              onclick="copyServerIp()"
+              class="flex items-center gap-1.5 rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-bold text-emerald-300 transition hover:bg-emerald-500/20"
+              title="Click to copy Server IP"
+            >
+              <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"></span>
+              <span>huzdupe.minehut.gg</span>
+            </button>
+          </div>
+          <p class="text-[11px] text-zinc-400">Currency: <span class="font-semibold text-fuchsia-300">Discord Server Boosts</span></p>
+        </div>
+      </div>
+
+      <!-- Right Controls -->
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Sound Toggle -->
+        <button
+          id="soundToggleBtn"
+          type="button"
+          onclick="toggleSound()"
+          class="rounded-xl border border-white/15 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-zinc-200 transition hover:bg-white/10"
+          title="Toggle Sound Effects"
+        >
+          🔊 SFX
+        </button>
+
+        <!-- Auth Buttons (Hidden once signed in until account is deleted) -->
+        <div id="guestAuthButtons" class="flex items-center gap-1.5">
+          <button
+            type="button"
+            onclick="openAuthModal('signin')"
+            class="rounded-xl border border-fuchsia-400/35 bg-fuchsia-500/15 px-3 py-1.5 text-xs font-bold text-fuchsia-200 transition hover:bg-fuchsia-500/25"
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            onclick="openAuthModal('login')"
+            class="rounded-xl border border-amber-400/35 bg-amber-500/15 px-3 py-1.5 text-xs font-bold text-amber-200 transition hover:bg-amber-500/25"
+          >
+            Login
+          </button>
+        </div>
+
+        <!-- Active Account Badge (Shown once signed in; includes Delete button) -->
+        <div id="loggedInAccountBox" class="hidden items-center gap-2 rounded-xl border border-emerald-400/35 bg-emerald-500/10 px-2.5 py-1 text-xs">
+          <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+          <span id="loggedInUsernameText" class="font-bold text-emerald-200">Player</span>
+          <button
+            type="button"
+            onclick="deleteSavedAccount()"
+            class="rounded-lg border border-rose-400/40 bg-rose-500/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-rose-200 transition hover:bg-rose-500/35"
+          >
+            Delete
+          </button>
+        </div>
+
+        <!-- Discord Link -->
+        <a
+          href="https://discord.gg/jcdaQ7W5Ur"
+          target="_blank"
+          rel="noopener noreferrer"
+          onclick="playUiSound('click')"
+          class="rounded-xl border border-indigo-400/35 bg-indigo-500/15 px-3 py-1.5 text-xs font-bold text-indigo-200 transition hover:bg-indigo-500/25"
+        >
+          Discord ↗
+        </a>
+
+        <!-- Database-Protected Admin Button -->
+        <button
+          id="adminHeaderBtn"
+          type="button"
+          onclick="openAdminPanelModal()"
+          class="flex items-center gap-1.5 rounded-xl border border-amber-400/40 bg-amber-500/15 px-3 py-1.5 text-xs font-bold text-amber-200 transition hover:bg-amber-500/25"
+        >
+          <span id="adminGateLockIcon">🔒</span>
+          <span>ADMIN</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="relative z-10 mx-auto max-w-6xl px-4 py-6 sm:px-6">
+    <!-- Hero Showcase -->
+    <section class="holo-card animate-fade-up relative mb-6 overflow-hidden rounded-2xl border border-white/10 p-5 sm:p-6 shadow-2xl">
+      <div class="scanline-fx pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-transparent via-fuchsia-400/10 to-transparent"></div>
+      <div class="flex flex-col items-center justify-between gap-6 md:flex-row">
+        <div class="max-w-xl text-center md:text-left">
+          <div class="inline-flex flex-wrap items-center gap-2">
+            <span class="rounded-full border border-fuchsia-400/35 bg-fuchsia-500/15 px-3 py-0.5 text-[11px] font-bold uppercase tracking-wider text-fuchsia-300">
+              Official Boost Store
+            </span>
+            <span id="dbStatusPill" class="rounded-full border border-sky-400/30 bg-sky-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-sky-300">
+              🗄️ DB Guard: Connecting...
+            </span>
+          </div>
+
+          <h1 class="mt-2.5 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Boost <span class="bg-gradient-to-r from-amber-300 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent">HuzDupe</span>. Unlock Elite Perks.
+          </h1>
+          <p class="mt-2 text-xs leading-relaxed text-zinc-300 sm:text-sm">
+            No real-money checkout needed — boost our Discord server and redeem <strong class="text-amber-300">VIP+</strong>, <strong class="text-fuchsia-300">MVP</strong>, or <strong class="text-purple-300">MVP++</strong> with instant Homes, Auction Spots, Orders, and Crate Keys.
+          </p>
+
+          <!-- Live Boost Meter -->
+          <div class="mt-4 rounded-xl border border-white/10 bg-black/50 p-3">
+            <div class="flex items-center justify-between text-[11px] font-bold">
+              <span class="text-zinc-400">ACTIVE BOOST BALANCE</span>
+              <span id="heroBoostStatusText" class="text-fuchsia-300">0 Boosts Verified</span>
+            </div>
+            <div class="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+              <div id="heroBoostProgressBar" class="boost-bar-gloss h-full w-2 transition-all duration-500"></div>
+            </div>
+            <div class="mt-1.5 flex justify-between text-[10px] font-semibold text-zinc-400">
+              <span>3 Boosts: VIP+</span>
+              <span>7 Boosts: MVP</span>
+              <span>13 Boosts: MVP++</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating End Crystal Emblem -->
+        <div class="relative flex h-36 w-36 shrink-0 items-center justify-center sm:h-40 sm:w-40">
+          <div class="animate-spin-slow absolute inset-0 rounded-full border border-dashed border-fuchsia-400/40"></div>
+          <div class="animate-spin-reverse absolute inset-3 rounded-full border border-dotted border-amber-400/45"></div>
+          <button
+            type="button"
+            onclick="pulseCrystal()"
+            class="animate-crystal relative flex h-24 w-24 items-center justify-center rounded-2xl border border-fuchsia-400/40 bg-gradient-to-br from-fuchsia-600/30 via-purple-900/50 to-amber-500/20 shadow-xl shadow-fuchsia-500/25 transition hover:scale-105"
+            title="Click to charge End Crystal"
+          >
+            <svg viewBox="0 0 64 64" class="h-14 w-14 drop-shadow-[0_0_12px_rgba(217,70,239,0.75)]">
+              <polygon points="32,4 54,32 32,60 10,32" fill="url(#crystalGrad)" stroke="#f5d0fe" stroke-width="2" />
+              <polygon points="32,12 46,32 32,52 18,32" fill="rgba(255,255,255,0.18)" />
+              <defs>
+                <linearGradient id="crystalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f59e0b" />
+                  <stop offset="50%" stop-color="#d946ef" />
+                  <stop offset="100%" stop-color="#7e22ce" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Switcher + Cooldown Status -->
+    <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+      <div class="inline-flex rounded-xl border border-white/10 bg-black/50 p-1">
+        <button
+          id="tabBtnRanks"
+          type="button"
+          onclick="switchStoreTab('ranks')"
+          class="rounded-lg bg-gradient-to-r from-amber-500 to-fuchsia-600 px-4 py-1.5 text-xs font-bold text-white shadow"
+        >
+          💎 Boost Ranks (3)
+        </button>
+        <button
+          id="tabBtnPerks"
+          type="button"
+          onclick="switchStoreTab('perks')"
+          class="rounded-lg px-4 py-1.5 text-xs font-bold text-zinc-400 transition hover:text-white"
+        >
+          ⚡ Perks &amp; Crate Keys
+        </button>
+      </div>
+
+      <div id="cooldownBannerBadge" class="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold text-zinc-300">
+        🛡️ Claim Guard: 1 claim per 3 hours • Anti-Mention Active
+      </div>
+    </div>
+
+    <!-- RANKS SECTION -->
+    <section id="ranksSection" class="grid grid-cols-1 gap-5 md:grid-cols-3">
+      <!-- VIP+ Card -->
+      <article class="holo-card group relative overflow-hidden rounded-2xl border border-amber-400/30 p-5" onmousemove="trackSpotlight(event, this)">
+        <div class="card-spotlight pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+        <div class="flex items-center justify-between">
+          <span class="rounded-lg bg-amber-500/20 px-2.5 py-1 text-xs font-bold text-amber-300">TIER I</span>
+          <span class="rounded-full border border-fuchsia-400/40 bg-fuchsia-500/15 px-3 py-1 text-xs font-bold text-fuchsia-200">
+            3 Boosts
+          </span>
+        </div>
+
+        <h2 class="mt-3 font-display text-2xl font-bold text-amber-300">VIP+</h2>
+        <p class="mt-1 text-xs text-zinc-400">Starter boost rank with extra homes, auction slots, and crate keys.</p>
+
+        <ul class="mt-4 space-y-2 border-t border-white/10 pt-4 text-xs text-zinc-200">
+          <li class="flex items-center justify-between"><span>🏠 Homes</span><strong class="text-amber-300">4 Homes</strong></li>
+          <li class="flex items-center justify-between"><span>🏷️ Auction Spots</span><strong class="text-amber-300">4 Spots</strong></li>
+          <li class="flex items-center justify-between"><span>📦 Orders</span><strong class="text-amber-300">4 Orders</strong></li>
+          <li class="flex items-center justify-between"><span>🗝️ Crate Keys</span><strong class="text-amber-300">3x Vote + 1x Rare</strong></li>
+          <li class="flex items-center justify-between"><span>💬 Prefix</span><strong class="text-amber-300">[VIP+]</strong></li>
+        </ul>
+
+        <button
+          type="button"
+          onclick="openClaimModal('VIP+')"
+          class="mt-5 w-full rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 py-2.5 text-xs font-bold text-zinc-950 shadow-lg shadow-amber-500/20 transition hover:brightness-110"
+        >
+          Claim VIP+ (3 Boosts)
+        </button>
+      </article>
+
+      <!-- MVP Card -->
+      <article class="holo-card group relative overflow-hidden rounded-2xl border border-fuchsia-400/40 p-5" onmousemove="trackSpotlight(event, this)">
+        <div class="card-spotlight pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+        <div class="flex items-center justify-between">
+          <span class="rounded-lg bg-fuchsia-500/20 px-2.5 py-1 text-xs font-bold text-fuchsia-300">POPULAR</span>
+          <span class="rounded-full border border-fuchsia-400/40 bg-fuchsia-500/15 px-3 py-1 text-xs font-bold text-fuchsia-200">
+            7 Boosts
+          </span>
+        </div>
+
+        <h2 class="mt-3 font-display text-2xl font-bold text-fuchsia-300">MVP</h2>
+        <p class="mt-1 text-xs text-zinc-400">Expanded trading capacity, priority commands, and rare keys.</p>
+
+        <ul class="mt-4 space-y-2 border-t border-white/10 pt-4 text-xs text-zinc-200">
+          <li class="flex items-center justify-between"><span>🏠 Homes</span><strong class="text-fuchsia-300">8 Homes</strong></li>
+          <li class="flex items-center justify-between"><span>🏷️ Auction Spots</span><strong class="text-fuchsia-300">8 Spots</strong></li>
+          <li class="flex items-center justify-between"><span>📦 Orders</span><strong class="text-fuchsia-300">8 Orders</strong></li>
+          <li class="flex items-center justify-between"><span>🗝️ Crate Keys</span><strong class="text-fuchsia-300">3x Rare + 1x Epic</strong></li>
+          <li class="flex items-center justify-between"><span>💬 Prefix</span><strong class="text-fuchsia-300">[MVP]</strong></li>
+        </ul>
+
+        <button
+          type="button"
+          onclick="openClaimModal('MVP')"
+          class="mt-5 w-full rounded-xl bg-gradient-to-r from-fuchsia-500 to-purple-600 py-2.5 text-xs font-bold text-white shadow-lg shadow-fuchsia-500/25 transition hover:brightness-110"
+        >
+          Claim MVP (7 Boosts)
+        </button>
+      </article>
+
+      <!-- MVP++ Card -->
+      <article class="holo-card group relative overflow-hidden rounded-2xl border border-purple-400/45 p-5" onmousemove="trackSpotlight(event, this)">
+        <div class="card-spotlight pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+        <div class="flex items-center justify-between">
+          <span class="rounded-lg bg-purple-500/25 px-2.5 py-1 text-xs font-bold text-purple-200">MAX TIER</span>
+          <span class="rounded-full border border-amber-400/40 bg-amber-500/15 px-3 py-1 text-xs font-bold text-amber-200">
+            13 Boosts
+          </span>
+        </div>
+
+        <h2 class="mt-3 font-display text-2xl font-bold bg-gradient-to-r from-amber-300 to-fuchsia-300 bg-clip-text text-transparent">
+          MVP++
+        </h2>
+        <p class="mt-1 text-xs text-zinc-400">Ultimate HuzDupe booster rank with maximum limits &amp; top keys.</p>
+
+        <ul class="mt-4 space-y-2 border-t border-white/10 pt-4 text-xs text-zinc-200">
+          <li class="flex items-center justify-between"><span>🏠 Homes</span><strong class="text-amber-300">15 Homes</strong></li>
+          <li class="flex items-center justify-between"><span>🏷️ Auction Spots</span><strong class="text-amber-300">15 Spots</strong></li>
+          <li class="flex items-center justify-between"><span>📦 Orders</span><strong class="text-amber-300">15 Orders</strong></li>
+          <li class="flex items-center justify-between"><span>🗝️ Crate Keys</span><strong class="text-amber-300">3x Epic + 2x Huz</strong></li>
+          <li class="flex items-center justify-between"><span>💬 Prefix</span><strong class="text-amber-300">[MVP++]</strong></li>
+        </ul>
+
+        <button
+          type="button"
+          onclick="openClaimModal('MVP++')"
+          class="mt-5 w-full rounded-xl bg-gradient-to-r from-amber-400 via-fuchsia-500 to-purple-600 py-2.5 text-xs font-bold text-white shadow-lg shadow-fuchsia-500/30 transition hover:brightness-110"
+        >
+          Claim MVP++ (13 Boosts)
+        </button>
+      </article>
+    </section>
+
+    <!-- PERKS COMPARISON SECTION -->
+    <section id="perksSection" class="hidden">
+      <div class="holo-card overflow-hidden rounded-2xl border border-white/10 p-5">
+        <h2 class="font-display text-xl font-bold text-white">Rank Perks &amp; Crate Keys Breakdown</h2>
+        <p class="mt-1 text-xs text-zinc-400">Every rank includes permanent Homes, Auction Spots, Orders, and instant Crate Keys upon boost verification.</p>
+
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full min-w-[520px] text-left text-xs">
+            <thead>
+              <tr class="border-b border-white/10 text-zinc-400">
+                <th class="py-2.5">Perk / Benefit</th>
+                <th class="py-2.5 text-amber-300">VIP+ (3 Boosts)</th>
+                <th class="py-2.5 text-fuchsia-300">MVP (7 Boosts)</th>
+                <th class="py-2.5 text-purple-300">MVP++ (13 Boosts)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/10 text-zinc-200">
+              <tr>
+                <td class="py-2.5 font-semibold">🏠 Homes</td>
+                <td class="py-2.5">4 Homes</td>
+                <td class="py-2.5">8 Homes</td>
+                <td class="py-2.5 font-bold text-amber-300">15 Homes</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-semibold">🏷️ Auction Spots</td>
+                <td class="py-2.5">4 Spots</td>
+                <td class="py-2.5">8 Spots</td>
+                <td class="py-2.5 font-bold text-amber-300">15 Spots</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-semibold">📦 Orders</td>
+                <td class="py-2.5">4 Orders</td>
+                <td class="py-2.5">8 Orders</td>
+                <td class="py-2.5 font-bold text-amber-300">15 Orders</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-semibold">🗝️ Crate Keys</td>
+                <td class="py-2.5">3x Vote + 1x Rare</td>
+                <td class="py-2.5">3x Rare + 1x Epic</td>
+                <td class="py-2.5 font-bold text-amber-300">3x Epic + 2x Huz</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-semibold">⚡ Utilities</td>
+                <td class="py-2.5">/workbench, /hat</td>
+                <td class="py-2.5">/enderchest, /anvil, /feed</td>
+                <td class="py-2.5 font-bold text-amber-300">/fly (Hub), /heal, /nick</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CLAIM RANK MODAL -->
+  <div id="claimModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+    <div class="holo-card relative w-full max-w-md rounded-2xl border border-fuchsia-400/40 p-5 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-fuchsia-300">Boost Verification</span>
+          <h3 id="claimModalTitle" class="font-display text-xl font-bold text-white">Claim VIP+</h3>
+        </div>
+        <button type="button" onclick="closeClaimModal()" class="rounded-lg bg-white/10 px-2.5 py-1 text-xs font-bold text-zinc-300 hover:bg-white/20">✕</button>
+      </div>
+
+      <div class="mt-4 space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-300">Minecraft Username (IGN) <span class="text-zinc-500">(min 3 letters)</span></label>
+          <input
+            id="claimMcUser"
+            type="text"
+            maxlength="16"
+            placeholder="e.g. Notch"
+            oninput="validateClaimForm()"
+            class="mt-1 w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-white placeholder-zinc-500 focus:border-fuchsia-400 focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label class="block font-semibold text-zinc-300">Discord User ID <span class="text-zinc-500">(17–20 digits)</span></label>
+          <input
+            id="claimDiscordUser"
+            type="text"
+            inputmode="numeric"
+            maxlength="20"
+            placeholder="Enable Developer Mode and copy your user ID"
+            oninput="validateClaimForm()"
+            class="mt-1 w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-white placeholder-zinc-500 focus:border-fuchsia-400 focus:outline-none"
+          />
+        </div>
+
+        <!-- Boost Count Verification Box -->
+        <div class="rounded-xl border border-white/10 bg-black/50 p-3">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-zinc-300">Live Server Boost Count:</span>
+            <span id="claimRequiredBoostBadge" class="rounded bg-fuchsia-500/20 px-2 py-0.5 font-bold text-fuchsia-300">Needs 3 Boosts</span>
+          </div>
+          <div class="mt-2 flex items-center gap-2">
+            <input id="claimBoostCountInput" type="hidden" value="0" />
+            <span id="liveBoostCountLabel" class="min-w-16 rounded-lg border border-white/15 bg-black/70 px-3 py-1.5 font-bold text-amber-300">—</span>
+            <button
+              type="button"
+              onclick="verifyDiscordBoosts()"
+              class="flex-1 rounded-lg border border-indigo-400/40 bg-indigo-500/20 py-1.5 font-bold text-indigo-200 transition hover:bg-indigo-500/30"
+            >
+              Verify Boost Status
+            </button>
+          </div>
+          <p id="boostVerifyFeedback" class="mt-2 text-[11px] text-zinc-400">
+            Enter your Discord User ID. We check your booster status and the live server count directly with Discord.
+          </p>
+        </div>
+
+        <button
+          id="submitClaimBtn"
+          type="button"
+          disabled
+          onclick="submitBoostClaim()"
+          class="w-full rounded-xl bg-gradient-to-r from-amber-500 to-fuchsia-600 py-2.5 font-bold text-white shadow-lg transition disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          Submit Boost Claim
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGN IN / LOGIN MODAL -->
+  <div id="authModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+    <div class="holo-card relative w-full max-w-sm rounded-2xl border border-white/15 p-5 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <div class="flex gap-1.5 rounded-xl bg-black/60 p-1">
+          <button id="authTabSignIn" type="button" onclick="switchAuthTab('signin')" class="rounded-lg bg-fuchsia-600 px-3 py-1 text-xs font-bold text-white">Sign In</button>
+          <button id="authTabLogin" type="button" onclick="switchAuthTab('login')" class="rounded-lg px-3 py-1 text-xs font-bold text-zinc-400">Login</button>
+        </div>
+        <button type="button" onclick="closeAuthModal()" class="rounded-lg bg-white/10 px-2.5 py-1 text-xs font-bold text-zinc-300">✕</button>
+      </div>
+
+      <form onsubmit="handleAuthSubmit(event)" class="mt-4 space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-300">Minecraft / Store Username</label>
+          <input
+            id="authUsernameInput"
+            type="text"
+            required
+            minlength="3"
+            maxlength="20"
+            placeholder="Enter username (3+ letters)"
+            class="mt-1 w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-white placeholder-zinc-500 focus:border-fuchsia-400 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-300">Account PIN / Password</label>
+          <input
+            id="authPasswordInput"
+            type="password"
+            required
+            minlength="4"
+            placeholder="Enter password"
+            class="mt-1 w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-white placeholder-zinc-500 focus:border-fuchsia-400 focus:outline-none"
+          />
+        </div>
+        <button type="submit" id="authSubmitBtn" class="w-full rounded-xl bg-gradient-to-r from-amber-500 to-fuchsia-600 py-2.5 font-bold text-white shadow-lg">
+          Create &amp; Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DATABASE-BACKED ADMIN PANEL MODAL (NO PASSWORD IN SOURCE) -->
+  <div id="adminPanelModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
+    <div id="adminModalCard" class="holo-card relative w-full max-w-md rounded-2xl border border-amber-400/40 p-5 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">Server-Verified Admin</span>
+          <h3 class="font-display text-xl font-bold text-white">Boost Management</h3>
+        </div>
+        <button type="button" onclick="closeAdminPanelModal()" class="rounded-lg bg-white/10 px-2.5 py-1 text-xs font-bold text-zinc-300 hover:bg-white/20">✕</button>
+      </div>
+
+      <div id="adminLockScreen" class="mt-4 space-y-3 text-xs">
+        <p class="text-zinc-300">Admin access is checked by the secure server. The password is never stored in this page.</p>
+        <div>
+          <label class="block font-semibold text-zinc-300">Admin Password</label>
+          <input id="adminPasswordInput" type="password" autocomplete="current-password" placeholder="Enter admin password..." onkeydown="if(event.key==='Enter') unlockAdminPanel()" class="mt-1 w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-white placeholder-zinc-500 focus:border-amber-400 focus:outline-none" />
+        </div>
+        <p id="adminLockStatusText" class="text-[11px] text-zinc-400">Your admin session expires after 8 hours.</p>
+        <button id="adminUnlockBtn" type="button" onclick="unlockAdminPanel()" class="w-full rounded-xl bg-gradient-to-r from-amber-500 to-fuchsia-600 py-2.5 font-bold text-white shadow-lg transition hover:brightness-110">Unlock Admin Panel</button>
+      </div>
+
+      <div id="adminUnlockedContent" class="mt-4 hidden space-y-3 text-xs">
+        <div class="flex items-center justify-between rounded-xl border border-emerald-400/35 bg-emerald-500/10 px-3 py-2 text-emerald-200">
+          <span class="font-bold">🔓 Authenticated by secure server</span>
+          <button type="button" onclick="lockAdminPanel()" class="rounded bg-black/40 px-2 py-0.5 text-[10px] font-bold text-zinc-200 hover:bg-black/70">Lock</button>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-black/40 p-3 text-zinc-300">
+          <p class="font-bold text-amber-200">Current shared boost meter: <span id="adminCurrentBoostCount">—</span></p>
+          <p class="mt-1 text-[11px] text-zinc-400">Review claims below. Confirm sends one public rewards announcement; deny never uses the announcement webhook.</p>
+        </div>
+        <div class="flex items-center justify-between">
+          <h4 class="font-bold text-white">Boost Claims &amp; History</h4>
+          <button type="button" onclick="loadAdminClaims()" class="rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 font-bold text-zinc-200">Refresh</button>
+        </div>
+        <div id="adminClaimsList" class="max-h-80 space-y-2 overflow-y-auto rounded-xl border border-white/10 bg-black/30 p-2">
+          <p class="p-3 text-zinc-400">Loading claims…</p>
+        </div>
+        <button type="button" onclick="removeBoosts()" class="w-full rounded-xl border border-rose-400/40 bg-rose-500/15 py-2.5 font-bold text-rose-200 transition hover:bg-rose-500/25">− Clear Shared Boost Meter</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+  <!-- Firebase Firestore Integration (Zero Hardcoded Password in Source) -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
+    import { getAuth, signInAnonymously, signInWithCustomToken } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
+    import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+
+    // Configure both Huz pages with the SAME Firebase Web App settings.
+    // Replace the placeholder values with your Firebase project's Web App config.
+    const HUZ_FIREBASE_CONFIG = {
+      apiKey: 'AIzaSyB-YXVHMpO4mDLiWJzVbhvO2z-EOLO0pPg',
+      authDomain: 'huzdupestore.firebaseapp.com',
+      projectId: 'huzdupestore',
+      storageBucket: 'huzdupestore.firebasestorage.app',
+      messagingSenderId: '1092890232032',
+      appId: '1:1092890232032:web:8b98922eed72e99bd67c85',
+      measurementId: 'G-8TMS6QVSH7'
+    };
+
+    const dbPill = document.getElementById('dbStatusPill');
+    window.__huzDbReady = false;
+    window.__huzFirestore = null;
+    window.__huzAppId = typeof __app_id !== 'undefined' ? __app_id : 'huzdupe-store';
+
+    async function initDatabaseSecurity() {
+      try {
+        const injectedConfig = (typeof __firebase_config !== 'undefined' && __firebase_config) ? (typeof __firebase_config === 'string' ? JSON.parse(__firebase_config) : __firebase_config) : null;
+        const configured = injectedConfig || (HUZ_FIREBASE_CONFIG.apiKey !== 'PASTE_FIREBASE_API_KEY' && HUZ_FIREBASE_CONFIG.projectId !== 'PASTE_PROJECT_ID' ? HUZ_FIREBASE_CONFIG : null);
+        if (!configured) {
+          if (dbPill) {
+            dbPill.textContent = '⚠️ DB Config Missing (Set __firebase_config)';
+            dbPill.className = 'rounded-full border border-amber-400/35 bg-amber-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-amber-300';
+          }
+          return;
+        }
+
+        const app = initializeApp(configured, 'huzdupe-shared-app');
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+
+        window.__huzFirestore = db;
+        window.__huzDbReady = true;
+        const boostRef = doc(db, 'huz_shared', 'boost_meter');
+        onSnapshot(boostRef, (snap) => {
+          if (snap.exists() && Number.isFinite(Number(snap.data().boosts))) {
+            const sharedData = snap.data();
+            updateBoostMeter(sharedData.boosts);
+            // Restore the shared verified state after refresh for every visitor.
+            boostVerifiedFlag = false; // Shared count is informational; each claimant must verify with Discord.
+            try { localStorage.setItem('huzdupe_boost_verified_v1', String(boostVerifiedFlag)); } catch (_) {}
+            if (typeof validateClaimForm === 'function') validateClaimForm();
+          }
+        }, (err) => console.warn('Boost sync listener:', err));
+
+        if (dbPill) {
+          dbPill.textContent = '🗄️ Firestore Vault Active';
+          dbPill.className = 'rounded-full border border-emerald-400/35 bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-300';
+        }
+      } catch (err) {
+        console.error('Database security initialization failed:', err);
+        if (dbPill) {
+          dbPill.textContent = '⚠️ DB Connection Error';
+          dbPill.className = 'rounded-full border border-rose-400/35 bg-rose-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-rose-300';
+        }
+      }
+    }
+
+    initDatabaseSecurity();
+  </script>
+
+  <!-- Main Interactive Store & Defense Logic -->
+  <script>
+
+    const RANK_CONFIG = Object.freeze({
+      'VIP+': Object.freeze({ boosts: 3, color: 0xf59e0b, perks: '4 Homes • 4 Auction Spots • 4 Orders • 3x Vote + 1x Rare Keys' }),
+      'MVP': Object.freeze({ boosts: 7, color: 0xd946ef, perks: '8 Homes • 8 Auction Spots • 8 Orders • 3x Rare + 1x Epic Keys' }),
+      'MVP++': Object.freeze({ boosts: 13, color: 0x9333ea, perks: '15 Homes • 15 Auction Spots • 15 Orders • 3x Epic + 2x Huz Keys' }),
+    });
+
+    const THREE_HOURS_MS = 3 * 60 * 60 * 1000;
+    const COOLDOWN_STORAGE_KEY = 'huzdupe_claim_guard_v2';
+    const ACCOUNT_STORAGE_KEY = 'huzdupe_user_account_v1';
+    const ADMIN_LOCKOUT_KEY = 'huzdupe_admin_lockout_v1';
+
+    let soundEnabled = true;
+    let audioCtx = null;
+    let selectedRank = 'VIP+';
+    let verifiedBoostCount = 0;
+    let boostVerifiedFlag = false;
+    // Local browser storage is never accepted as proof of Discord boosts.
+    boostVerifiedFlag = false;
+    let adminUnlocked = false;
+    let authMode = 'signin';
+
+    function playUiSound(type = 'click') {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+        if (type === 'success' || type === 'login') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'error' || type === 'delete') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.exponentialRampToValueAtTime(110, now + 0.22);
+          gain.gain.setValueAtTime(0.11, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'pulse') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(1174.66, now + 0.28);
+          gain.gain.setValueAtTime(0.13, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+          osc.start(now);
+          osc.stop(now + 0.34);
+        } else {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(640, now);
+          gain.gain.setValueAtTime(0.07, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.09);
+        }
+      } catch (_) {}
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('soundToggleBtn');
+      if (btn) btn.textContent = soundEnabled ? '🔊 SFX' : '🔇 Muted';
+      if (soundEnabled) playUiSound('click');
+    }
+
+    function showToast(message, tone = 'fuchsia') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const colors = {
+        emerald: 'border-emerald-400/40 bg-emerald-950/90 text-emerald-100',
+        amber: 'border-amber-400/40 bg-amber-950/90 text-amber-100',
+        rose: 'border-rose-400/40 bg-rose-950/90 text-rose-100',
+        fuchsia: 'border-fuchsia-400/40 bg-fuchsia-950/90 text-fuchsia-100',
+      };
+      const el = document.createElement('div');
+      el.className = `animate-fade-up rounded-xl border px-4 py-2.5 text-xs font-semibold shadow-xl backdrop-blur-md ${
+        colors[tone] || colors.fuchsia
+      }`;
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => el.remove(), 260);
+      }, 2800);
+    }
+
+    function copyServerIp() {
+      navigator.clipboard?.writeText('huzdupe.minehut.gg').catch(() => {});
+      playUiSound('success');
+      showToast('Copied Server IP: huzdupe.minehut.gg', 'emerald');
+    }
+
+    function pulseCrystal() {
+      playUiSound('pulse');
+      showToast('End Crystal charged! Select a rank to redeem your Discord Boosts.', 'fuchsia');
+    }
+
+    function trackSpotlight(e, card) {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+    }
+
+    function switchStoreTab(tab) {
+      playUiSound('click');
+      const ranksEl = document.getElementById('ranksSection');
+      const perksEl = document.getElementById('perksSection');
+      const btnRanks = document.getElementById('tabBtnRanks');
+      const btnPerks = document.getElementById('tabBtnPerks');
+
+      if (tab === 'ranks') {
+        ranksEl?.classList.remove('hidden');
+        perksEl?.classList.add('hidden');
+        btnRanks.className = 'rounded-lg bg-gradient-to-r from-amber-500 to-fuchsia-600 px-4 py-1.5 text-xs font-bold text-white shadow';
+        btnPerks.className = 'rounded-lg px-4 py-1.5 text-xs font-bold text-zinc-400 transition hover:text-white';
+      } else {
+        ranksEl?.classList.add('hidden');
+        perksEl?.classList.remove('hidden');
+        btnPerks.className = 'rounded-lg bg-gradient-to-r from-amber-500 to-fuchsia-600 px-4 py-1.5 text-xs font-bold text-white shadow';
+        btnRanks.className = 'rounded-lg px-4 py-1.5 text-xs font-bold text-zinc-400 transition hover:text-white';
+      }
+    }
+
+    const BOOST_COUNT_STORAGE_KEY = 'huzdupe_verified_boost_count_v1';
+
+    function updateBoostMeter(boosts, persistLocal = true) {
+      verifiedBoostCount = Math.max(0, Math.min(50, Number(boosts) || 0));
+      if (persistLocal) {
+        try { localStorage.setItem(BOOST_COUNT_STORAGE_KEY, String(verifiedBoostCount)); }
+        catch (err) { console.warn('Could not cache verified boost count locally:', err); }
+      }
+      const pct = Math.min(100, Math.round((verifiedBoostCount / 13) * 100));
+      const bar = document.getElementById('heroBoostProgressBar');
+      const txt = document.getElementById('heroBoostStatusText');
+      const adminCount = document.getElementById('adminCurrentBoostCount');
+      if (adminCount) adminCount.textContent = String(verifiedBoostCount);
+      if (bar) bar.style.width = `${Math.max(4, pct)}%`;
+      if (txt) txt.textContent = `${verifiedBoostCount} Boost${verifiedBoostCount === 1 ? '' : 's'} Verified`;
+    }
+
+    // Paint the previously saved count immediately; Firestore can replace it
+    // with the shared value when its real-time listener connects.
+    updateBoostMeter(verifiedBoostCount, false);
+
+    // Strict input sanitization to block @everyone, @here, mentions, links, and announcement injection
+    function sanitizeCleanName(raw) {
+      const cleaned = String(raw || '')
+        .replace(/[@<>`*_~|\\/:#]/g, '')
+        .replace(/https?:\/\/\S+/gi, '')
+        .replace(/\b(everyone|here|discord\.gg)\b/gi, '')
+        .replace(/[^a-zA-Z0-9_.-]/g, '')
+        .trim();
+      return cleaned;
+    }
+
+    function hasAtLeastThreeLetters(str) {
+      const letters = (str.match(/[a-zA-Z]/g) || []).length;
+      return letters >= 3;
+    }
+
+    // Cooldown integrity guard (1 claim per 3 hours)
+    function getCooldownRemainingMs() {
+      try {
+        const raw = localStorage.getItem(COOLDOWN_STORAGE_KEY);
+        if (!raw) return 0;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed.ts !== 'number' || parsed.sig !== `HZ_${parsed.ts * 7}`) {
+          return THREE_HOURS_MS; // tampered storage defaults to full lockout
+        }
+        const elapsed = Date.now() - parsed.ts;
+        return elapsed < THREE_HOURS_MS ? THREE_HOURS_MS - elapsed : 0;
+      } catch (_) {
+        return 0;
+      }
+    }
+
+    function recordClaimTimestamp() {
+      const ts = Date.now();
+      localStorage.setItem(COOLDOWN_STORAGE_KEY, JSON.stringify({ ts, sig: `HZ_${ts * 7}` }));
+      updateCooldownBanner();
+    }
+
+    function updateCooldownBanner() {
+      const banner = document.getElementById('cooldownBannerBadge');
+      if (!banner) return;
+      const rem = getCooldownRemainingMs();
+      if (rem > 0) {
+        const mins = Math.ceil(rem / 60000);
+        const hrs = Math.floor(mins / 60);
+        const m = mins % 60;
+        banner.textContent = `⏳ Claim Cooldown Active: ${hrs}h ${m}m remaining`;
+        banner.className = 'rounded-xl border border-amber-400/35 bg-amber-500/15 px-3 py-1.5 text-[11px] font-bold text-amber-200';
+      } else {
+        banner.textContent = '🛡️ Claim Guard: Ready (1 claim per 3 hours)';
+        banner.className = 'rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold text-zinc-300';
+      }
+    }
+
+    function openClaimModal(rankName) {
+      playUiSound('click');
+      selectedRank = RANK_CONFIG[rankName] ? rankName : 'VIP+';
+      const reqBoosts = RANK_CONFIG[selectedRank].boosts;
+
+      document.getElementById('claimModalTitle').textContent = `Claim ${selectedRank}`;
+      document.getElementById('claimRequiredBoostBadge').textContent = `Needs ${reqBoosts} Boosts`;
+      document.getElementById('claimBoostCountInput').value = verifiedBoostCount;
+
+      const savedAcc = getSavedAccount();
+      if (savedAcc && !document.getElementById('claimMcUser').value) {
+        document.getElementById('claimMcUser').value = savedAcc.username;
+      }
+
+      validateClaimForm();
+      const modal = document.getElementById('claimModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeClaimModal() {
+      playUiSound('click');
+      const modal = document.getElementById('claimModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function verifyDiscordBoosts() {
+      const discordUserId = String(document.getElementById('claimDiscordUser').value || '').trim();
+      const fb = document.getElementById('boostVerifyFeedback');
+      const verifyButton = document.querySelector('button[onclick="verifyDiscordBoosts()"]');
+      if (!/^\d{17,20}$/.test(discordUserId)) {
+        fb.textContent = 'Enter a valid Discord User ID (17–20 digits).';
+        fb.className = 'mt-2 text-[11px] font-bold text-rose-300';
+        boostVerifiedFlag = false;
+        validateClaimForm();
+        return;
+      }
+      if (verifyButton) { verifyButton.disabled = true; verifyButton.textContent = 'Checking Discord...'; }
+      try {
+        const response = await fetch('/.netlify/functions/verify-boosts', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ discordUserId })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Discord verification failed.');
+        updateBoostMeter(result.boosts);
+        document.getElementById('claimBoostCountInput').value = String(result.boosts);
+        const countLabel = document.getElementById('liveBoostCountLabel');
+        if (countLabel) countLabel.textContent = String(result.boosts);
+        boostVerifiedFlag = result.isBooster === true;
+        const needed = RANK_CONFIG[selectedRank].boosts;
+        if (!boostVerifiedFlag) {
+          fb.textContent = `❌ This Discord account is not currently boosting HuzDupe. Live server total: ${result.boosts}.`;
+          fb.className = 'mt-2 text-[11px] font-bold text-rose-300';
+        } else if (result.boosts < needed) {
+          fb.textContent = `✅ Your account is boosting. The server has ${result.boosts}; ${selectedRank} requires ${needed} total server boosts.`;
+          fb.className = 'mt-2 text-[11px] font-bold text-amber-300';
+        } else {
+          fb.textContent = `✅ Discord confirms you are boosting. Live server total: ${result.boosts}. Eligible for ${selectedRank}.`;
+          fb.className = 'mt-2 text-[11px] font-bold text-emerald-300';
+        }
+        try { localStorage.setItem('huzdupe_boost_verified_v1', String(boostVerifiedFlag)); } catch (_) {}
+      } catch (error) {
+        boostVerifiedFlag = false;
+        fb.textContent = error.message || 'Could not verify with Discord. Try again later.';
+        fb.className = 'mt-2 text-[11px] font-bold text-rose-300';
+      } finally {
+        if (verifyButton) { verifyButton.disabled = false; verifyButton.textContent = 'Verify Boost Status'; }
+        validateClaimForm();
+      }
+    }
+
+    function validateClaimForm() {
+      const mc = sanitizeCleanName(document.getElementById('claimMcUser').value);
+      const dc = String(document.getElementById('claimDiscordUser').value || '').trim();
+      const count = Math.max(0, Number(document.getElementById('claimBoostCountInput').value) || 0);
+      const needed = RANK_CONFIG[selectedRank].boosts;
+      const validUsers = hasAtLeastThreeLetters(mc) && /^\d{17,20}$/.test(dc);
+      const validBoosts = boostVerifiedFlag && count >= needed;
+      const btn = document.getElementById('submitClaimBtn');
+      if (btn) btn.disabled = !(validUsers && validBoosts);
+    }
+
+    async function submitBoostClaim() {
+      const mc = sanitizeCleanName(document.getElementById('claimMcUser').value);
+      const discordUserId = String(document.getElementById('claimDiscordUser').value || '').trim();
+      const cfg = RANK_CONFIG[selectedRank];
+      if (!hasAtLeastThreeLetters(mc) || !/^\d{17,20}$/.test(discordUserId)) {
+        showToast('Enter a valid Minecraft username and Discord User ID.', 'rose'); return;
+      }
+      const btn = document.getElementById('submitClaimBtn');
+      btn.disabled = true; btn.textContent = 'Rechecking with Discord...';
+      try {
+        const response = await fetch('/.netlify/functions/submit-claim', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ mcUser: mc, discordUserId, rankName: selectedRank })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Claim could not be verified.');
+        recordClaimTimestamp();
+        playUiSound('success');
+        showToast(`${selectedRank} claim submitted for ${mc}!`, 'emerald');
+        closeClaimModal();
+      } catch (error) {
+        playUiSound('error'); showToast(error.message || 'Claim could not be submitted.', 'rose');
+        boostVerifiedFlag = false;
+      } finally {
+        btn.textContent = 'Submit Boost Claim'; validateClaimForm();
+      }
+    }
+
+    // Account Sign In / Login Persistence (hides Sign In & Login buttons until deleted)
+    function getSavedAccount() {
+      try {
+        const raw = localStorage.getItem(ACCOUNT_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function restoreSavedAccount() {
+      const acc = getSavedAccount();
+      const guestBox = document.getElementById('guestAuthButtons');
+      const userBox = document.getElementById('loggedInAccountBox');
+      const nameSpan = document.getElementById('loggedInUsernameText');
+
+      if (acc && acc.username) {
+        guestBox?.classList.add('hidden');
+        userBox?.classList.remove('hidden');
+        userBox?.classList.add('flex');
+        if (nameSpan) nameSpan.textContent = acc.username;
+      } else {
+        guestBox?.classList.remove('hidden');
+        userBox?.classList.add('hidden');
+        userBox?.classList.remove('flex');
+      }
+    }
+
+    function openAuthModal(mode = 'signin') {
+      playUiSound('click');
+      switchAuthTab(mode);
+      const modal = document.getElementById('authModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeAuthModal() {
+      playUiSound('click');
+      const modal = document.getElementById('authModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function switchAuthTab(mode) {
+      authMode = mode;
+      const tSign = document.getElementById('authTabSignIn');
+      const tLog = document.getElementById('authTabLogin');
+      const subBtn = document.getElementById('authSubmitBtn');
+      if (mode === 'signin') {
+        tSign.className = 'rounded-lg bg-fuchsia-600 px-3 py-1 text-xs font-bold text-white';
+        tLog.className = 'rounded-lg px-3 py-1 text-xs font-bold text-zinc-400';
+        subBtn.textContent = 'Create & Sign In';
+      } else {
+        tLog.className = 'rounded-lg bg-amber-500 px-3 py-1 text-xs font-bold text-zinc-950';
+        tSign.className = 'rounded-lg px-3 py-1 text-xs font-bold text-zinc-400';
+        subBtn.textContent = 'Login to Account';
+      }
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const cleanUser = sanitizeCleanName(document.getElementById('authUsernameInput').value);
+      const pass = document.getElementById('authPasswordInput').value || '';
+
+      if (!hasAtLeastThreeLetters(cleanUser) || pass.length < 4) {
+        playUiSound('error');
+        showToast('Enter a valid username (3+ letters) and 4+ character PIN.', 'rose');
+        return;
+      }
+
+      localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify({ username: cleanUser, createdAt: Date.now() }));
+      restoreSavedAccount();
+      closeAuthModal();
+      playUiSound('login');
+      showToast(`Signed in as ${cleanUser}!`, 'emerald');
+    }
+
+    function deleteSavedAccount() {
+      localStorage.removeItem(ACCOUNT_STORAGE_KEY);
+      restoreSavedAccount();
+      playUiSound('delete');
+      showToast('Account deleted — Sign In & Login buttons restored.', 'amber');
+    }
+
+    // Database-Verified Admin Panel (Zero Plaintext Password in Page Source)
+    function openAdminPanelModal() {
+      playUiSound('click');
+      syncAdminGateVisibility();
+      const modal = document.getElementById('adminPanelModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeAdminPanelModal() {
+      playUiSound('click');
+      const modal = document.getElementById('adminPanelModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function syncAdminGateVisibility() {
+      const lockScreen = document.getElementById('adminLockScreen');
+      const unlockedScreen = document.getElementById('adminUnlockedContent');
+      const icon = document.getElementById('adminGateLockIcon');
+
+      if (adminUnlocked) {
+        lockScreen?.classList.add('hidden');
+        unlockedScreen?.classList.remove('hidden');
+        if (icon) icon.textContent = '🔓';
+      } else {
+        lockScreen?.classList.remove('hidden');
+        unlockedScreen?.classList.add('hidden');
+        if (icon) icon.textContent = '🔒';
+      }
+    }
+
+    async function unlockAdminPanel() {
+      const input = document.getElementById('adminPasswordInput');
+      const statusTxt = document.getElementById('adminLockStatusText');
+      const btn = document.getElementById('adminUnlockBtn');
+      const password = input?.value || '';
+      if (!password) { showToast('Enter the admin password.', 'rose'); return; }
+      btn.disabled = true; btn.textContent = 'Verifying...';
+      try {
+        const response = await fetch('/.netlify/functions/admin-login', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ password })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Admin login failed.');
+        adminUnlocked = true; if (input) input.value = '';
+        syncAdminGateVisibility();
+        const count = document.getElementById('adminCurrentBoostCount');
+        if (count) count.textContent = String(verifiedBoostCount);
+        playUiSound('success'); showToast('Admin panel unlocked.', 'emerald'); loadAdminClaims();
+      } catch (error) {
+        statusTxt.textContent = error.message || 'Server verification failed.';
+        statusTxt.className = 'text-[11px] font-bold text-rose-300';
+        playUiSound('error');
+      } finally { btn.disabled = false; btn.textContent = 'Unlock Admin Panel'; }
+    }
+
+    async function lockAdminPanel() {
+      try {
+        await fetch('/.netlify/functions/admin-action', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'logout' })
+        });
+      } catch (_) {}
+      adminUnlocked = false; syncAdminGateVisibility(); playUiSound('click');
+    }
+
+
+    function escapeAdminText(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
+    async function adminAction(payload) {
+      const response = await fetch('/.netlify/functions/admin-action', {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Admin action failed.');
+      return result;
+    }
+
+    async function loadAdminClaims() {
+      if (!adminUnlocked) return;
+      const box = document.getElementById('adminClaimsList');
+      if (box) box.innerHTML = '<p class="p-3 text-zinc-400">Loading claims…</p>';
+      try {
+        const result = await adminAction({ action: 'list-claims' });
+        if (!result.claims?.length) { box.innerHTML = '<p class="p-3 text-zinc-400">No boost claims yet.</p>'; return; }
+        box.innerHTML = result.claims.map(c => {
+          const status = String(c.status || 'pending');
+          const badge = status === 'approved' ? 'text-emerald-300' : status === 'denied' ? 'text-rose-300' : 'text-amber-300';
+          const date = c.createdAt ? new Date(c.createdAt).toLocaleString() : 'Unknown date';
+          const controls = status === 'pending' ? `<div class="mt-2 grid grid-cols-2 gap-2"><button type="button" onclick="reviewBoostClaim('${escapeAdminText(c.id)}','confirm-claim')" class="rounded-lg bg-emerald-600/90 px-2 py-2 font-bold text-white hover:bg-emerald-500">✓ Confirm Boost Rewards</button><button type="button" onclick="reviewBoostClaim('${escapeAdminText(c.id)}','deny-claim')" class="rounded-lg bg-rose-600/90 px-2 py-2 font-bold text-white hover:bg-rose-500">✕ Deny Boost Rewards</button></div>` : '';
+          return `<article class="rounded-lg border border-white/10 bg-white/[.04] p-3"><div class="flex items-center justify-between gap-2"><strong class="text-white">${escapeAdminText(c.rankName || 'Boost claim')}</strong><span class="font-bold uppercase ${badge}">${escapeAdminText(status)}</span></div><p class="mt-1 text-zinc-300">In-game: <strong>${escapeAdminText(c.mcUser)}</strong></p><p class="text-zinc-300">Discord: <span class="text-indigo-300">@${escapeAdminText(c.discordUserId)}</span></p><p class="text-zinc-400">Claimed: ${escapeAdminText(c.rankName)} · ${escapeAdminText(date)}</p>${controls}</article>`;
+        }).join('');
+      } catch (error) { if (box) box.innerHTML = `<p class="p-3 text-rose-300">${escapeAdminText(error.message)}</p>`; }
+    }
+
+    async function reviewBoostClaim(claimId, action) {
+      if (!adminUnlocked) return;
+      const confirmText = action === 'confirm-claim'
+        ? 'Confirm this reward? This sends a public announcement to your server.'
+        : 'Deny this claim? No public announcement will be sent.';
+      if (!window.confirm(confirmText)) return;
+      try {
+        await adminAction({ action, claimId });
+        showToast(action === 'confirm-claim' ? 'Claim approved and announced.' : 'Claim denied. No announcement sent.', 'emerald');
+        await loadAdminClaims();
+      } catch (error) { showToast(error.message || 'Could not review claim.', 'rose'); }
+    }
+
+    async function removeBoosts() {
+      if (!adminUnlocked) return;
+      if (!window.confirm('Clear the shared boost meter? This does not remove actual Discord subscriptions.')) return;
+      try {
+        const response = await fetch('/.netlify/functions/admin-action', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'clear-boosts' })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Could not clear boost meter.');
+        updateBoostMeter(0);
+        boostVerifiedFlag = false;
+        document.getElementById('claimBoostCountInput').value = '0';
+        const label = document.getElementById('liveBoostCountLabel'); if (label) label.textContent = '0';
+        const adminCount = document.getElementById('adminCurrentBoostCount'); if (adminCount) adminCount.textContent = '0';
+        validateClaimForm(); showToast('Shared boost meter cleared. Discord subscriptions are unchanged.', 'emerald');
+      } catch (error) { showToast(error.message || 'Could not clear boost meter.', 'rose'); }
+    }
+
+    function initInteractiveEffects() {
+      window.addEventListener(
+        'scroll',
+        () => {
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const pct = docHeight > 0 ? Math.min(100, Math.round((window.scrollY / docHeight) * 100)) : 0;
+          const bar = document.getElementById('scrollProgressBar');
+          if (bar) bar.style.width = `${pct}%`;
+        },
+        { passive: true }
+      );
+
+      restoreSavedAccount();
+      updateCooldownBanner();
+      setInterval(updateCooldownBanner, 30000);
+    }
+
+    initInteractiveEffects();
+  </script>
+</body>
+</html>
