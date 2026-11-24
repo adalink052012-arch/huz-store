@@ -999,7 +999,7 @@
           method: 'POST', headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ discordUserId })
         });
-        const result = await response.json();
+        const result = await readFunctionJson(response);
         if (!response.ok) throw new Error(result.error || 'Discord verification failed.');
         updateBoostMeter(result.boosts);
         document.getElementById('claimBoostCountInput').value = String(result.boosts);
@@ -1053,7 +1053,7 @@
           method: 'POST', headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ mcUser: mc, discordUserId, rankName: selectedRank })
         });
-        const result = await response.json();
+        const result = await readFunctionJson(response);
         if (!response.ok) throw new Error(result.error || 'Claim could not be verified.');
         recordClaimTimestamp();
         playUiSound('success');
@@ -1151,6 +1151,22 @@
       showToast('Account deleted — Sign In & Login buttons restored.', 'amber');
     }
 
+
+    // Parse API responses defensively so Netlify HTML error pages don't cause
+    // "Unexpected token '<'" JSON parsing errors in the admin/claim UI.
+    async function readFunctionJson(response) {
+      const contentType = response.headers.get('content-type') || '';
+      const raw = await response.text();
+      if (!contentType.includes('application/json')) {
+        const message = response.status === 404
+          ? 'Netlify function not found. Check that netlify/functions was deployed.'
+          : `Server returned a non-JSON response (HTTP ${response.status}). Check the Netlify function deployment.`;
+        throw new Error(message);
+      }
+      try { return JSON.parse(raw); }
+      catch (_) { throw new Error('Server returned invalid JSON. Check the Netlify function logs.'); }
+    }
+
     // Database-Verified Admin Panel (Zero Plaintext Password in Page Source)
     function openAdminPanelModal() {
       playUiSound('click');
@@ -1195,7 +1211,7 @@
           method: 'POST', headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ password })
         });
-        const result = await response.json();
+        const result = await readFunctionJson(response);
         if (!response.ok) throw new Error(result.error || 'Admin login failed.');
         adminUnlocked = true; if (input) input.value = '';
         syncAdminGateVisibility();
@@ -1228,7 +1244,7 @@
       const response = await fetch('/.netlify/functions/admin-action', {
         method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload)
       });
-      const result = await response.json();
+      const result = await readFunctionJson(response);
       if (!response.ok) throw new Error(result.error || 'Admin action failed.');
       return result;
     }
@@ -1271,7 +1287,7 @@
           method: 'POST', headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ action: 'clear-boosts' })
         });
-        const result = await response.json();
+        const result = await readFunctionJson(response);
         if (!response.ok) throw new Error(result.error || 'Could not clear boost meter.');
         updateBoostMeter(0);
         boostVerifiedFlag = false;
