@@ -696,10 +696,17 @@
           <p class="mt-1 text-[11px] text-zinc-400">Review claims below. Confirm sends one public rewards announcement; deny never uses the announcement webhook.</p>
         </div>
         <div class="flex items-center justify-between">
+          <h4 class="font-bold text-white">Request Boost Amount</h4>
+          <button type="button" onclick="loadAdminBoostRequests()" class="rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 font-bold text-zinc-200">Refresh</button>
+        </div>
+        <div id="adminBoostRequestsList" class="max-h-64 space-y-2 overflow-y-auto rounded-xl border border-indigo-400/20 bg-black/30 p-2">
+          <p class="p-3 text-zinc-400">Loading requests…</p>
+        </div>
+        <div class="flex items-center justify-between">
           <h4 class="font-bold text-white">Boost Claims &amp; History</h4>
           <button type="button" onclick="loadAdminClaims()" class="rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 font-bold text-zinc-200">Refresh</button>
         </div>
-        <div id="adminClaimsList" class="max-h-80 space-y-2 overflow-y-auto rounded-xl border border-white/10 bg-black/30 p-2">
+        <div id="adminClaimsList" class="max-h-64 space-y-2 overflow-y-auto rounded-xl border border-white/10 bg-black/30 p-2">
           <p class="p-3 text-zinc-400">Loading claims…</p>
         </div>
         <button type="button" onclick="removeBoosts()" class="w-full rounded-xl border border-rose-400/40 bg-rose-500/15 py-2.5 font-bold text-rose-200 transition hover:bg-rose-500/25">− Clear Shared Boost Meter</button>
@@ -1319,7 +1326,7 @@
         syncAdminGateVisibility();
         const count = document.getElementById('adminCurrentBoostCount');
         if (count) count.textContent = String(verifiedBoostCount);
-        playUiSound('success'); showToast('Admin panel unlocked.', 'emerald'); loadAdminClaims();
+        playUiSound('success'); showToast('Admin panel unlocked.', 'emerald'); loadAdminClaims(); loadAdminBoostRequests();
       } catch (error) {
         statusTxt.textContent = error.message || 'Server verification failed.';
         statusTxt.className = 'text-[11px] font-bold text-rose-300';
@@ -1366,6 +1373,34 @@
           return `<article class="rounded-lg border border-white/10 bg-white/[.04] p-3"><div class="flex items-center justify-between gap-2"><strong class="text-white">${escapeAdminText(c.rankName || 'Boost claim')}</strong><span class="font-bold uppercase ${badge}">${escapeAdminText(status)}</span></div><p class="mt-1 text-zinc-300">In-game: <strong>${escapeAdminText(c.mcUser)}</strong></p><p class="text-zinc-300">Discord: <span class="text-indigo-300">@${escapeAdminText(c.discordUserId)}</span></p><p class="text-zinc-400">Claimed: ${escapeAdminText(c.rankName)} · ${escapeAdminText(date)}</p>${controls}</article>`;
         }).join('');
       } catch (error) { if (box) box.innerHTML = `<p class="p-3 text-rose-300">${escapeAdminText(error.message)}</p>`; }
+    }
+
+    async function loadAdminBoostRequests() {
+      if (!adminUnlocked) return;
+      const box = document.getElementById('adminBoostRequestsList');
+      if (box) box.innerHTML = '<p class="p-3 text-zinc-400">Loading requests…</p>';
+      try {
+        const result = await adminAction({ action: 'list-boost-requests' });
+        if (!result.requests?.length) { box.innerHTML = '<p class="p-3 text-zinc-400">No boost amount requests yet.</p>'; return; }
+        box.innerHTML = result.requests.map(r => {
+          const status = String(r.status || 'pending');
+          const badge = status === 'accepted' ? 'text-emerald-300' : status === 'denied' ? 'text-rose-300' : 'text-amber-300';
+          const date = r.createdAt ? new Date(r.createdAt).toLocaleString() : 'Unknown date';
+          const controls = status === 'pending' ? `<div class="mt-2 grid grid-cols-2 gap-2"><button type="button" onclick="reviewBoostAmountRequest('${escapeAdminText(r.id)}','accept')" class="rounded-lg bg-emerald-600/90 px-2 py-2 font-bold text-white hover:bg-emerald-500">✓ Accept</button><button type="button" onclick="reviewBoostAmountRequest('${escapeAdminText(r.id)}','deny')" class="rounded-lg bg-rose-600/90 px-2 py-2 font-bold text-white hover:bg-rose-500">✕ Deny</button></div>` : '';
+          return `<article class="rounded-lg border border-indigo-400/20 bg-white/[.04] p-3"><div class="flex items-center justify-between gap-2"><strong class="text-white">Boost Amount Request</strong><span class="font-bold uppercase ${badge}">${escapeAdminText(status)}</span></div><p class="mt-1 text-zinc-300">Discord: <strong>@${escapeAdminText(r.discordUsername)}</strong></p><p class="text-zinc-300">In-game: <strong>${escapeAdminText(r.mcUser)}</strong></p><p class="text-zinc-500">Submitted: ${escapeAdminText(date)}</p>${controls}</article>`;
+        }).join('');
+      } catch (error) { if (box) box.innerHTML = `<p class="p-3 text-rose-300">${escapeAdminText(error.message)}</p>`; }
+    }
+
+    async function reviewBoostAmountRequest(requestId, decision) {
+      if (!adminUnlocked) return;
+      const label = decision === 'accept' ? 'accept' : 'deny';
+      if (!window.confirm(`Are you sure you want to ${label} this boost amount request? This sends a status message to the review-status webhook.`)) return;
+      try {
+        await adminAction({ action: 'review-boost-request', requestId, decision });
+        showToast(decision === 'accept' ? 'Request accepted. Status webhook notified.' : 'Request denied. Status webhook notified.', 'emerald');
+        await loadAdminBoostRequests();
+      } catch (error) { showToast(error.message || 'Could not review boost request.', 'rose'); }
     }
 
     async function reviewBoostClaim(claimId, action) {
